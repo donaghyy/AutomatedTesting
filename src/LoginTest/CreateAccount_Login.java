@@ -3,11 +3,18 @@ import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 
+import com.google.common.base.Function;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.*;
 
+import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
 
@@ -19,6 +26,7 @@ public class CreateAccount_Login {
 
     private WebDriver webDriver;
     LoginPage l = new LoginPage();
+    Wait<WebDriver> wait;
 
     @Before
     public void bTest() {
@@ -29,33 +37,44 @@ public class CreateAccount_Login {
           
         l = PageFactory.initElements(webDriver, LoginPage.class);
         
+        wait = new FluentWait<WebDriver>(webDriver)
+				.withTimeout(30, SECONDS)
+				.pollingEvery(5, SECONDS)
+				.ignoring(NoSuchElementException.class);
+        
         
     }
 
     @After
     public void aTest() {
-        System.out.println("After");
+        System.out.println("Test Complete.");
         webDriver.quit();
     }
 
     @Test
     public void CreateAcc_Login() throws InterruptedException {
       
-    		System.out.println("Begin Test");
+    		System.out.println("Begin Test ...");
         webDriver.navigate().to("http://thedemosite.co.uk/login.php");
         
         l.goRegistration();
-        		l.sleep(2);
+        		//l.sleep(3);
         l.enterCredentials("test", "test");
         		
         l.submitClick();
-        		l.sleep(2);
+        		
         l.goLogin();
         		
         l.enterCredentials("test", "test");
-        		l.sleep(2);
+        		
         l.submitClick();
-        assertEquals("**Successful Login**", l.getStatus());
+        
+        
+        
+        assertEquals("**Successful Login**", wait.until(webDriver -> l.getStatus()));
+        
+        TimeUnit.SECONDS.sleep(5);
+        webDriver.quit();
         
         /*//webDriver.manage().window().maximize();
         
@@ -77,8 +96,7 @@ public class CreateAccount_Login {
         		cssSelector("body > table > tbody > tr > td.auto-style1 > big > blockquote > blockquote > font > center > b")).getText());
          */
         
-        TimeUnit.SECONDS.sleep(5);
-        webDriver.quit();
+        
     }
     
 
