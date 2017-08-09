@@ -33,11 +33,22 @@ public class CreateAccount_Login {
     LoginPage l = new LoginPage();
     Wait<WebDriver> wait;
     
-    private ExtentReports report;
+    private static ExtentReports report;
     private ExtentTest test;
-    private String reportFilePath = "Report.html";
+    private static String reportFilePath = "Report.html";
     ScreenShot snap = new ScreenShot();
+    
+    //ExtentTest login = report.createTest("LOGIN TESTS");
 
+    @BeforeClass
+    public static void bc() {
+    		report = new ExtentReports();
+        ExtentHtmlReporter extentHtmlReporter = new ExtentHtmlReporter(reportFilePath);
+        extentHtmlReporter.config().setReportName("ReportName");
+        extentHtmlReporter.config().setDocumentTitle("DocumentTitle");
+        report.attachReporter(extentHtmlReporter);
+    }
+    
     @Before
     public void setUp() {
         System.out.println("Before");
@@ -52,13 +63,6 @@ public class CreateAccount_Login {
 				.pollingEvery(5, SECONDS)
 				.ignoring(NoSuchElementException.class);
         
-        
-        //______________________________________________________REPORTS
-        report = new ExtentReports();
-        ExtentHtmlReporter extentHtmlReporter = new ExtentHtmlReporter(reportFilePath);
-        extentHtmlReporter.config().setReportName("ReportName");
-        extentHtmlReporter.config().setDocumentTitle("DocumentTitle");
-        report.attachReporter(extentHtmlReporter);
         test = report.createTest("TestName");
     }
 
@@ -68,7 +72,12 @@ public class CreateAccount_Login {
         webDriver.quit();
         
         //tests.clear();
-        report.flush();
+        
+    }
+    
+    @AfterClass
+    public static void AfterClass() {
+    		report.flush();
     }
 
     
@@ -76,7 +85,7 @@ public class CreateAccount_Login {
     public void CreateAcc_Login() throws InterruptedException, IOException {
     		
     	
-    			test.log(Status.WARNING, "This is a warning! Used to report warnings");
+    		test.log(Status.WARNING, "This is a warning! Used to report warnings");
     		String imagePath = ScreenShot.take(webDriver, "TEST IMAGE");
     	
     		System.out.println("Begin Test ...");
@@ -88,12 +97,12 @@ public class CreateAccount_Login {
         		
         l.submitClick();
         
-        		test.log(Status.INFO,"Info level");
-        
         l.goLogin();
-        		snap.take(webDriver, "TEST IMAGE");
         		
         l.enterCredentials("test", "test");
+        
+        		snap.take(webDriver, "TEST IMAGE"); // takes screenshot and saves to computer
+        		test.addScreenCaptureFromPath(snap.take(webDriver, "MAYBE")); // takes screenshot for report
         
         l.submitClick();
         
@@ -101,17 +110,21 @@ public class CreateAccount_Login {
         
         assertEquals("**Successful Login**", wait.until(webDriver -> l.getStatus()));
         
-        TimeUnit.SECONDS.sleep(5);
+        test.log(Status.INFO,"Info level");
+       // login.log(Status.INFO, "REALLY HOPE THIS WORKS");
+        
+        TimeUnit.SECONDS.sleep(2);
         webDriver.quit();
         
         
-        /*WebElement UN = wait.until(new Function<WebDriver, WebElement>()
-		{
-			public WebElement apply(WebDriver driver) {
-				return driver.findElement(By.name("username"));
-			}
-		});*/
         
+    }
+    
+    @Test
+    public void myTestMethod(){
+        assertEquals(1,2);
+       // login.log(Status.INFO, "REALLY HOPE THIS WORKS");
+        test.pass("PASS NOT REALLy");
     }
     
 
