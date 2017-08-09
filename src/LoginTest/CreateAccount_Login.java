@@ -195,36 +195,70 @@ public class CreateAccount_Login {
     @Test
     public void sortTiles() throws InterruptedException{
     	test = report.createTest("Sort Tiles");    
+    	Actions a = new Actions(webDriver);
     	
     	webDriver.navigate().to("http://demoqa.com/");
     	webDriver.manage().window().maximize();
     	
-    		webDriver.findElement(By.id("menu-item-151")).click();
-    			TimeUnit.SECONDS.sleep(2);
-    		webDriver.findElement(By.cssSelector("#ui-id-3")).click();
+    	webDriver.findElement(By.id("menu-item-151")).click();
+    	webDriver.findElement(By.cssSelector("#ui-id-3")).click();
     		
-    		ArrayList<String> sort = new ArrayList();
-    		for(int i=1; i<=12; i++) {
-    			String s = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child("+i+")")).getText();
-    			sort.add(s);
+		WebElement first = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child(1)"));
+    		WebElement sec = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child(2)"));
+    		WebElement third = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child(3)"));
+    		WebElement fourth = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child(4)"));
+    		WebElement fith = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child(5)"));
+    		WebElement sixth = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child(6)"));
+    		WebElement seventh = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child(7)"));
+    		WebElement eighth = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child(8)"));
+    		WebElement nineth = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child(9)"));
+    		WebElement tenth = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child(10)"));
+    		WebElement eleventh = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child(11)"));
+    		WebElement twelth = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child(12)"));
+
+    		/*ArrayList<WebElement> sort = new ArrayList<WebElement>();
+    		for(int i=12; i<=1; i--) {
+    			WebElement el = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child("+i+")"));
+    			sort.add(el);
+    			a.moveToElement(el).clickAndHold().moveToElement(first)
+        		.release().build().perform();
     		}
-    		
-    		WebElement first = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child(1)"));
-    		
-    		Actions a = new Actions(webDriver);
-    		WebElement twelve = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child(12)"));
     				
     		String firstPos = first.getLocation().toString();
-    		String xVal = firstPos.substring(1,4);
-    		String yVal = firstPos.substring(6,9);
+    		int xVal = Integer.parseInt(firstPos.substring(1,4));
+    		int yVal = Integer.parseInt(firstPos.substring(6,9));
     		
-    		System.out.println(xVal);
-    		System.out.println(yVal);
+    		for (int i=1; i== sort.size(); i++) {
+    			a.moveToElement(sort.get(i)).clickAndHold().moveToElement(twelve)
+        		.release().build().perform();
+    		}
+    		*/
     		
-    		//a.moveToElement(twelve).clickAndHold().moveByOffset(firstPos)
+    		a.moveToElement(twelth).clickAndHold().moveToElement(first)
+    		.release().build().perform();
+    		a.moveToElement(eleventh).clickAndHold().moveToElement(first)
+    		.release().build().perform();
+    		a.moveToElement(tenth).clickAndHold().moveToElement(first)
+    		.release().build().perform();
+    		a.moveToElement(nineth).clickAndHold().moveToElement(first)
+    		.release().build().perform();
+    		a.moveToElement(eighth).clickAndHold().moveToElement(first)
+    		.release().build().perform();
+    		a.moveToElement(seventh).clickAndHold().moveToElement(first)
+    		.release().build().perform();
+    		a.moveToElement(sixth).clickAndHold().moveToElement(first)
+    		.release().build().perform();
+    		a.moveToElement(fith).clickAndHold().moveToElement(first)
+    		.release().build().perform();
+    		a.moveToElement(fourth).clickAndHold().moveToElement(first)
+    		.release().build().perform();
+    		a.moveToElement(third).clickAndHold().moveToElement(first)
+    		.release().build().perform();
+    		a.moveToElement(sec).clickAndHold().moveToElement(first)
+    		.release().build().perform();
     		
     		
-    		TimeUnit.SECONDS.sleep(5);
+    		TimeUnit.SECONDS.sleep(10);
     }
     
     
