@@ -2,9 +2,11 @@ package LoginTest;
 import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
@@ -16,12 +18,15 @@ import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.google.common.base.Function;
 
 import Reports.ScreenShot;
+import SpreadSheets.SpreadSheetReader;
 import junit.extensions.TestSetup;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
@@ -44,8 +49,10 @@ public class CreateAccount_Login {
     public static void bc() {
     		report = new ExtentReports();
         ExtentHtmlReporter extentHtmlReporter = new ExtentHtmlReporter(reportFilePath);
-        extentHtmlReporter.config().setReportName("ReportName");
-        extentHtmlReporter.config().setDocumentTitle("DocumentTitle");
+        
+        		//	Name you report here
+        extentHtmlReporter.config().setReportName("Test Report 1");
+        extentHtmlReporter.config().setDocumentTitle("Document Title 1");
         report.attachReporter(extentHtmlReporter);
     }
     
@@ -63,7 +70,7 @@ public class CreateAccount_Login {
 				.pollingEvery(5, SECONDS)
 				.ignoring(NoSuchElementException.class);
         
-        test = report.createTest("TestName");
+        //test = report.createTest("TestName"); // Do this is each test so named right
     }
 
     @After
@@ -81,9 +88,15 @@ public class CreateAccount_Login {
     }
 
     
-    @Test
+    @Ignore
     public void CreateAcc_Login() throws InterruptedException, IOException {
-    		
+    	test = report.createTest("Create User / Login");
+    
+    	// MAVEN BUILD ERROR STOPS READING FROM EXCELL FILE
+    	/*SpreadSheetReader ss = new SpreadSheetReader(System.getProperty("user.dir") + "/Workbook1.xlsx");
+    	 List<String> row = ss.readRow(1, "theSheet");*/
+    	 
+    	 
     	
     		test.log(Status.WARNING, "This is a warning! Used to report warnings");
     		String imagePath = ScreenShot.take(webDriver, "TEST IMAGE");
@@ -94,6 +107,7 @@ public class CreateAccount_Login {
         l.goRegistration();
         
         l.enterCredentials("test", "test");
+        //l.enterCredentials(row.get(0).toString(), row.get(0).toString());
         		
         l.submitClick();
         
@@ -101,8 +115,8 @@ public class CreateAccount_Login {
         		
         l.enterCredentials("test", "test");
         
-        		snap.take(webDriver, "TEST IMAGE"); // takes screenshot and saves to computer
-        		test.addScreenCaptureFromPath(snap.take(webDriver, "MAYBE")); // takes screenshot for report
+        		//snap.take(webDriver, "TEST IMAGE"); // takes screenshot and saves to computer
+        		test.addScreenCaptureFromPath(snap.take(webDriver, "Credentials")); // takes screenshot for report
         
         l.submitClick();
         
@@ -111,7 +125,6 @@ public class CreateAccount_Login {
         assertEquals("**Successful Login**", wait.until(webDriver -> l.getStatus()));
         
         test.log(Status.INFO,"Info level");
-       // login.log(Status.INFO, "REALLY HOPE THIS WORKS");
         
         TimeUnit.SECONDS.sleep(2);
         webDriver.quit();
@@ -120,13 +133,108 @@ public class CreateAccount_Login {
         
     }
     
-    @Test
-    public void myTestMethod(){
-        assertEquals(1,2);
-       // login.log(Status.INFO, "REALLY HOPE THIS WORKS");
-        test.pass("PASS NOT REALLy");
+    @Ignore
+    public void drag() throws InterruptedException{
+    	test = report.createTest("Dragable");    
+    	
+    	webDriver.navigate().to("http://demoqa.com/");
+    	webDriver.manage().window().maximize();
+    	
+    		webDriver.findElement(By.id("menu-item-140")).click();
+    		TimeUnit.SECONDS.sleep(2);
+    		
+    		Actions a = new Actions(webDriver);
+    		WebElement drag = webDriver.findElement(By.id("draggable"));
+    		a.moveToElement(drag).clickAndHold().moveByOffset(250, 250).release().build().perform();
+    		
+    		TimeUnit.SECONDS.sleep(5);
+    }
+    
+    @Ignore
+    public void dragAndDrop() throws InterruptedException{
+    	test = report.createTest("Dropable");    
+    	
+    	webDriver.navigate().to("http://demoqa.com/");
+    	webDriver.manage().window().maximize();
+    	
+    		webDriver.findElement(By.id("menu-item-141")).click();
+    		TimeUnit.SECONDS.sleep(2);
+    		
+    		Actions a = new Actions(webDriver);
+    		WebElement drag = webDriver.findElement(By.id("draggableview"));
+    		WebElement drop = webDriver.findElement(By.id("droppableview"));
+    		
+    		a.moveToElement(drag).clickAndHold().moveToElement(drop).release().build().perform();
+    		
+    		
+    		TimeUnit.SECONDS.sleep(5);
+    }
+    
+    @Ignore
+    public void resize() throws InterruptedException{
+    	test = report.createTest("Resize");    
+    	
+    	webDriver.navigate().to("http://demoqa.com/");
+    	webDriver.manage().window().maximize();
+    	
+    		webDriver.findElement(By.id("menu-item-143")).click();
+    		TimeUnit.SECONDS.sleep(2);
+    		
+    		Actions a = new Actions(webDriver);
+    		WebElement resize = webDriver.findElement(By.cssSelector
+    				("div.ui-resizable-handle.ui-resizable-se.ui-icon.ui-icon-gripsmall-diagonal-se"));
+    				
+    		
+    		a.moveToElement(resize).clickAndHold().moveByOffset(399, 200).release().build().perform();
+    		
+    		
+    		TimeUnit.SECONDS.sleep(5);
     }
     
 
+    @Test
+    public void sortTiles() throws InterruptedException{
+    	test = report.createTest("Sort Tiles");    
+    	
+    	webDriver.navigate().to("http://demoqa.com/");
+    	webDriver.manage().window().maximize();
+    	
+    		webDriver.findElement(By.id("menu-item-151")).click();
+    			TimeUnit.SECONDS.sleep(2);
+    		webDriver.findElement(By.cssSelector("#ui-id-3")).click();
+    		
+    		ArrayList<String> sort = new ArrayList();
+    		for(int i=1; i<=12; i++) {
+    			String s = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child("+i+")")).getText();
+    			sort.add(s);
+    		}
+    		
+    		WebElement first = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child(1)"));
+    		
+    		Actions a = new Actions(webDriver);
+    		WebElement twelve = webDriver.findElement(By.cssSelector("#sortable_grid > li:nth-child(12)"));
+    				
+    		String firstPos = first.getLocation().toString();
+    		String xVal = firstPos.substring(1,4);
+    		String yVal = firstPos.substring(6,9);
+    		
+    		System.out.println(xVal);
+    		System.out.println(yVal);
+    		
+    		//a.moveToElement(twelve).clickAndHold().moveByOffset(firstPos)
+    		
+    		
+    		TimeUnit.SECONDS.sleep(5);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 }
