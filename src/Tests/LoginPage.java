@@ -1,4 +1,4 @@
-package LoginTest;
+package Tests;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
